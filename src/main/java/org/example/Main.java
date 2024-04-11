@@ -15,7 +15,7 @@ public class Main {
         BufferedReader reader;
 
         try {
-            reader = new BufferedReader(new FileReader("/Users/myner/Desktop/Test/src/main/java/org/example/parkinglog1"));
+            reader = new BufferedReader(new FileReader("/Users/myner/Desktop/INOX/src/main/java/org/example/parkinglog1"));
             String line = reader.readLine();
             Map<String, Long> car = new HashMap<>();
             Map<String, String[]> parking = new HashMap<>();
