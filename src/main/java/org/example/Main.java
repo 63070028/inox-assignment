@@ -17,12 +17,10 @@ public class Main {
         try {
             reader = new BufferedReader(new FileReader("/Users/myner/Desktop/INOX/src/main/java/org/example/parkinglog1"));
             String line = reader.readLine();
-            Map<String, Long> car = new HashMap<>();
+            Map<String, Car> log = new HashMap<>();
             Map<String, String[]> parking = new HashMap<>();
 
             while (line != null) {
-//                System.out.println(line);
-                // read next line
                 String[] data = line.split(",");
                 String no = data[0];
                 String action = data[1];
@@ -39,10 +37,10 @@ public class Main {
                     long diff = time_out.getTime() - time_in.getTime();
                     long diffMinutes = diff / (60 * 1000);
 
-                    if(car.containsKey(no)){
-                        car.put(no, car.get(no)+diffMinutes);
+                    if(log.containsKey(no)){
+                        log.get(no).time += diffMinutes;
                     }else{
-                        car.put(no, diffMinutes);
+                        log.put(no, new Car(no, diffMinutes));
                     }
 
 
@@ -52,16 +50,27 @@ public class Main {
             }
 
             reader.close();
-//            System.out.println(car);
-            Map<String, Long> sortedMap = sortMapByValueDescending(car);
-//            System.out.println(sortedMap);
-            int rank = 0;
-            for (String k:sortedMap.keySet()) {
-                if(rank >= 3){
-                    break;
+
+            List<Car> carRanking = new ArrayList<>(log.values());
+
+            carRanking.sort((c1, c2) -> {
+                if (c1.time < c2.time) {
+                    return 1;
+                } else if (c1.time > c2.time) {
+                    return -1;
+                } else {
+                    return 0;
                 }
-                System.out.printf("No:%s, Min:%s\n", k, sortedMap.get(k));
-                rank++;
+            });
+
+            if(carRanking.size() < 3){
+                for(int i=0; i<carRanking.size(); i++){
+                    System.out.printf("Rank:%s No:%s Time:%s\n", i+1, carRanking.get(i).no, carRanking.get(i).time);
+                }
+            }else{
+                for(int i=0; i<3; i++){
+                    System.out.printf("Rank:%s No:%s Time:%s\n", i+1, carRanking.get(i).no, carRanking.get(i).time);
+                }
             }
 
 
